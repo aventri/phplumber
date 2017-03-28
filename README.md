@@ -18,15 +18,17 @@ Example
 Let's take creating and filling a database as an example.  It takes multiple steps and some can be done concurrently.
 
 1. Create database (one process)
-2. Create and populate tables (one process per table)
-3. Create views dependent on multiple tables (one process, dependent on all tables existing)
-    
+1. Create and populate tables (one process per table)
+1. Create views dependent on multiple tables (one process, dependent on all tables existing)
 
+
+```
                          Create table 1
                        /                \
     Create database ->   Create table 2   -> Create views
                        \                /
                          Create table 3
+```
 
 First we would define our processes.  Sequential steps extend `Process`.  A step that can run multiple times with 
 different data extends `MultiProcess`.
