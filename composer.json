@@ -1,0 +1,34 @@
+{
+  "name": "etouches/phplumber",
+  "description": "Pipelining library which allows a mix of asynchronous and synchronous processes.",
+  "keywords": [
+    "async", "pipeline", "design pattern"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Matthew Schwartz",
+      "email": "matthew.schwartz@etouches.com"
+    },
+    {
+      "name": "Ashwin Sawh",
+      "email": "ashwin.sawh@etouches.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Etouches\\Phplumber\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Etouches\\Phplumber\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "php": ">=5.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.8.*"
+  }
+}
