@@ -103,7 +103,7 @@ abstract class ProcessList implements ProcessListInterface
             if ($process instanceof MultiProcess) {
                 $payloads = $process->getAsyncPayloads($payload);
                 $listName = get_class($this);
-                $id = $this->pause($listName, $processName, count($payloads), $payload);
+                $id = $this->pause(count($payloads), $payload);
                 foreach ($payloads as $payload) {
                     $this->queue->enqueueProcessAsync($id, $listName, $processName, $payload);
                 }
@@ -125,17 +125,13 @@ abstract class ProcessList implements ProcessListInterface
      * When the process list hits a multi-process, a pause is issued. A semaphore is stored. All async processes
      * must run to completion for the pause to be resumed
      *
-     * @param string $listName
-     * @param string $processName
      * @param int $count
      * @param array $payload
      * @return null
      */
-    protected function pause($listName, $processName, $count, array $payload)
+    protected function pause($count, array $payload)
     {
         $semaphore = new Semaphore();
-        $semaphore->list = $listName;
-        $semaphore->process = $processName;
         $semaphore->count = $count;
         $semaphore->listPayload = $payload;
         return $this->storage->storeSemaphore($semaphore);
@@ -175,8 +171,7 @@ abstract class ProcessList implements ProcessListInterface
                 $asyncComplete = true;
                 $this->storage->deleteSemaphore($id);
             } else {
-                $semaphore->count--;
-                $this->storage->storeSemaphore($semaphore);
+                $this->storage->decrementSemaphoreCount($id);
             }
         }
 

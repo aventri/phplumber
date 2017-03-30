@@ -33,10 +33,16 @@ interface StorageInterface
     public function getSemaphore($id);
 
     /**
+     * Decrement the count property of a semaphore.
+     *
+     * @param string|int $id
+     */
+    public function decrementSemaphoreCount($id);
+
+    /**
      * Remove from storage.
      *
      * @param string|int $id
-     * @return Semaphore
      */
     public function deleteSemaphore($id);
 

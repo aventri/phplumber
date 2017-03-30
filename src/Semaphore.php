@@ -10,10 +10,6 @@ class Semaphore
 {
     /** @var string|int */
     public $id;
-    /** @var string */
-    public $list;
-    /** @var string */
-    public $process;
     /** @var int */
     public $count;
     /** @var array */
