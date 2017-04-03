@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Phplumber MultiProcess example implementation
+ */
 class CreateTable extends \Etouches\Phplumber\MultiProcess
 {
     public function getAsyncPayloads(array $payload)

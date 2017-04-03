@@ -11,6 +11,8 @@ require_once __DIR__ . '/include/autoload.php';
 echo "This listens on the queue indefinitely until you hit ^C\n";
 
 $processFactory = new ProcessFactory();
-$queue = new Queue($processFactory);
+$storage = new Storage();
+$storage->connect();
+$queue = new Queue($processFactory, $storage);
 $queue->connect();
 $queue->consume();

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Phplumber Process example implementation
+ */
 class CreateViews extends \Etouches\Phplumber\Process
 {
     public function invoke(array $payload)

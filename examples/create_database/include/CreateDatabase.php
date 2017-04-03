@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Phplumber Process example implementation
+ */
 class CreateDatabase extends \Etouches\Phplumber\Process
 {
     public function invoke(array $payload)

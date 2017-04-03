@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Phplumber Storage example implementation
+ */
 class Storage implements \Etouches\Phplumber\StorageInterface
 {
     /** @var SQLite3 */
@@ -7,38 +10,20 @@ class Storage implements \Etouches\Phplumber\StorageInterface
 
     public function storeSemaphore(\Etouches\Phplumber\Semaphore $semaphore)
     {
-        if ($semaphore->id) {
-            $statement = $this->db->prepare(
-                "UPDATE semaphore 
-                SET list = :list,
-                    process = :process,
-                    count = :count,
-                    list_payload = :list_payload
-                WHERE id = :id"
-            );
-            $statement->bindValue(':id', $semaphore->id, SQLITE3_INTEGER);
-        } else {
-            $statement = $this->db->prepare(
-                "INSERT INTO semaphore (list, process, count, list_payload) 
-                VALUES (:list, :process, :count, :list_payload)"
-            );
-        }
-        $statement->bindValue(':list', $semaphore->list, SQLITE3_TEXT);
-        $statement->bindValue(':process', $semaphore->process, SQLITE3_TEXT);
+        $statement = $this->db->prepare(
+            "INSERT INTO semaphore (count, list_payload) 
+            VALUES (:count, :list_payload)"
+        );
         $statement->bindValue(':count', $semaphore->count, SQLITE3_INTEGER);
         $statement->bindValue(':list_payload', json_encode($semaphore->listPayload), SQLITE3_TEXT);
         $statement->execute();
-        if ($semaphore->id) {
-            return $semaphore->id;
-        } else {
-            return $this->db->lastInsertRowID();
-        }
+        return $this->db->lastInsertRowID();
     }
 
     public function getSemaphore($id)
     {
         $statement = $this->db->prepare(
-            "SELECT list, process, count, list_payload
+            "SELECT count, list_payload
             FROM semaphore
             WHERE id = :id"
         );
@@ -47,8 +32,6 @@ class Storage implements \Etouches\Phplumber\StorageInterface
         while ($row = $result->fetchArray()) {
             $semaphore = new \Etouches\Phplumber\Semaphore();
             $semaphore->id = (int) $id;
-            $semaphore->list = $row['list'];
-            $semaphore->process = $row['process'];
             $semaphore->count = (int) $row['count'];
             $semaphore->listPayload = json_decode($row['list_payload'], true);
             return $semaphore;
@@ -56,20 +39,29 @@ class Storage implements \Etouches\Phplumber\StorageInterface
         return null;
     }
 
+    public function decrementSemaphoreCount($id)
+    {
+        $statement = $this->db->prepare(
+            "UPDATE semaphore
+            SET count = count - 1
+            WHERE id = :id"
+        );
+        $statement->bindValue(':id', $id, SQLITE3_INTEGER);
+        $statement->execute();
+    }
+
     public function deleteSemaphore($id)
     {
-        $statement = $this->db->prepare("DELETE semaphore WHERE id = :id");
+        $statement = $this->db->prepare("DELETE FROM semaphore WHERE id = :id");
         $statement->bindValue(':id', $id, SQLITE3_INTEGER);
     }
 
     public function connect()
     {
-        $this->db = new SQLite3(realpath(__DIR__ . '/..') . '/sqlite_storage.db');
+        $this->db = new SQLite3(realpath(__DIR__ . '/..') . '/storage.db');
         $this->db->exec(
             "CREATE TABLE IF NOT EXISTS semaphore (
                 id INTEGER PRIMARY KEY,
-                list VARCHAR(255),
-                process VARCHAR(255),
                 count INT,
                 list_payload  TEXT
             )"

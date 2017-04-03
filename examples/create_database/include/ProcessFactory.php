@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Phplumber ProcessFactory example implementation
+ */
 class ProcessFactory implements \Etouches\Phplumber\ProcessFactoryInterface
 {
     /**

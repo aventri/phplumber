@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Queue example
+ * Phplumber Queue example implementation
  *
  * DO NOT USE THIS EXAMPLE IN REAL PROJECTS.
  *
@@ -43,7 +43,7 @@ class Queue extends \Etouches\Phplumber\Queue
 
     public function connect()
     {
-        $this->db = new SQLite3(realpath(__DIR__ . '/..') . '/sqlite_storage.db');
+        $this->db = new SQLite3(realpath(__DIR__ . '/..') . '/queue.db');
         $this->db->exec(
             "CREATE TABLE IF NOT EXISTS queue (
                 id INTEGER PRIMARY KEY,

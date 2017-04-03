@@ -1,2 +1,4 @@
 .idea
-examples/create_database/*.db
+composer.lock
+/examples/create_database/*.db
+/vendor
