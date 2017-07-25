@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) etouches.  All rights reserved.
+ * Copyright (c) etouches, Inc.  All rights reserved.
  * Licensed under the MIT License.  See LICENSE.md file in project root for complete license.
  */
 
